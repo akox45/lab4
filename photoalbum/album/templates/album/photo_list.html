@@ -1,0 +1,29 @@
+{% extends 'album/base.html' %}
+
+{% block content %}
+<h1>Fényképek</h1>
+
+<div class="mb-3">
+    <a href="?order_by=name" class="btn btn-sm btn-outline-primary">Rendezés név szerint</a>
+    <a href="?order_by=upload_date" class="btn btn-sm btn-outline-primary">Rendezés dátum szerint</a>
+</div>
+
+{% if photos %}
+    <div class="row">
+        {% for photo in photos %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ photo.name }}</h5>
+                        <p class="card-text">Feltöltve: {{ photo.upload_date|date:"Y-m-d H:i" }}</p>
+                        <a href="{% url 'photo_detail' photo.pk %}" class="btn btn-primary">Megtekintés</a>
+                        <a href="{% url 'photo_delete' photo.pk %}" class="btn btn-danger">Törlés</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Nincsenek még feltöltött képek.</p>
+{% endif %}
+{% endblock %}
