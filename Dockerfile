@@ -4,6 +4,7 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DEBUG=False
+ENV PORT=8000
 
 # Munkamappa létrehozása
 WORKDIR /app
@@ -19,7 +20,7 @@ COPY photoalbum/ .
 RUN python manage.py collectstatic --noinput
 
 # Portok
-EXPOSE 8000
+EXPOSE $PORT
 
 # Startup script
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "photoalbum.wsgi"]
+CMD gunicorn photoalbum.wsgi:application --bind 0.0.0.0:$PORT
