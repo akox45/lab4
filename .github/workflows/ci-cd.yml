@@ -39,13 +39,13 @@ jobs:
       
       - name: Deploy to Railway
         run: |
-          # PORT változó beállítása
-          railway variables set PORT=8000
+          # PORT környezeti változó beállítása
+          railway variables --set "PORT=8000"
           
           # Alkalmazás deployolása
           railway up
           
-          # Public networking engedélyezése a 8000-es porton
-          railway service network public --port 8000
+          # Domain generálása (ha még nincs)
+          railway domain
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
