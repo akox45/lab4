@@ -39,7 +39,7 @@ jobs:
       
       - name: Deploy to Railway
         run: |
-          railway login --browserless ${{ secrets.RAILWAY_TOKEN }}
+          echo "${{ secrets.RAILWAY_TOKEN }}" | railway login
           
           # PORT változó beállítása
           railway variables set PORT=8000
@@ -49,14 +49,6 @@ jobs:
           
           # Várakozás a deployment befejezésére
           sleep 30
-          
-          # Ellenőrizzük hogy van-e már domain
-          DOMAIN=$(railway variables get RAILWAY_PUBLIC_DOMAIN || echo "")
-          
-          # Ha nincs domain, állítsunk be egyet
-          if [ -z "$DOMAIN" ]; then
-            railway domain
-          fi
           
           # Public networking engedélyezése a 8000-es porton
           railway service network public --port 8000
