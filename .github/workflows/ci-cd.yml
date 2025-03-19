@@ -11,43 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - name: Deploy to Railway
+        uses: bervProject/railway-deploy@main
         with:
-          node-version: '18.x'
-
-      - name: Install Railway
-        run: npm install -g @railway/cli
-
-      - name: Deploy
-        run: |
-          # Explicit token beállítása
-          echo "${{ secrets.RAILWAY_TOKEN }}" > railway_token.txt
-          export RAILWAY_TOKEN=$(cat railway_token.txt)
-          
-          # Projekt link (ha van projekt ID)
-          if [ -n "${{ secrets.RAILWAY_PROJECT_ID }}" ]; then
-            echo "Linking existing project..."
-            railway link "${{ secrets.RAILWAY_PROJECT_ID }}"
-          else
-            echo "Creating new project..."
-            railway init --name photoalbum
-          fi
-          
-          # Új szolgáltatás létrehozása, ha még nincs
-          echo "Creating new service..."
-          railway add --name photoalbum-service || echo "Service may already exist"
-          
-          # PORT környezeti változó beállítása
-          echo "Setting PORT variable..."
-          railway variables --set "PORT=8000" || echo "Failed to set PORT variable"
-          
-          # Deploy
-          echo "Deploying..."
-          railway up
-          
-          # Domain
-          echo "Setting up domain..."
-          railway domain --port 8000 || echo "Failed to set up domain"
-        env:
-          NODE_ENV: production
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
