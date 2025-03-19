@@ -39,16 +39,11 @@ jobs:
       
       - name: Deploy to Railway
         run: |
-          echo "${{ secrets.RAILWAY_TOKEN }}" | railway login
-          
           # PORT változó beállítása
           railway variables set PORT=8000
           
           # Alkalmazás deployolása
-          railway up --detach
-          
-          # Várakozás a deployment befejezésére
-          sleep 30
+          railway up
           
           # Public networking engedélyezése a 8000-es porton
           railway service network public --port 8000
