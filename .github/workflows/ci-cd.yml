@@ -10,15 +10,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3    
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.11'         
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt         
+          pip install -r requirements.txt       
       - name: Run tests
         run: |
           cd photoalbum
@@ -29,10 +29,14 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      
       - name: Deploy to Railway
-        uses: railway/cli-action@master
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: ${{ secrets.RAILWAY_SERVICE_NAME }}
+        run: |
+          railway link --environment production --project ${{ secrets.RAILWAY_PROJECT_ID }}
+          railway up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
