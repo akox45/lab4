@@ -39,13 +39,19 @@ jobs:
       
       - name: Deploy to Railway
         run: |
+          # Projekt inicializálása vagy összekapcsolása
+          railway init || railway link
+          
+          # Service hozzáadása, ha még nincs
+          railway add || echo "Service already exists"
+          
           # PORT környezeti változó beállítása
           railway variables --set "PORT=8000"
           
           # Alkalmazás deployolása
           railway up
           
-          # Domain generálása (ha még nincs)
-          railway domain
+          # Domain generálása a 8000-es porthoz
+          railway domain --port 8000
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
