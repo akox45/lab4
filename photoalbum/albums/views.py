@@ -7,7 +7,7 @@ from .forms import PhotoUploadForm
 
 def photo_list(request):
     """Fényképek listázása név vagy dátum szerint"""
-    sort_by = request.GET.get('sort', 'date')  # Alapértelmezett: dátum szerint
+    sort_by = request.GET.get('sort', 'date')  
     
     if sort_by == 'name':
         photos = Photo.objects.all().order_by('name')
@@ -46,7 +46,6 @@ def photo_delete(request, photo_id):
     """Fénykép törlése (csak a tulajdonos számára)"""
     photo = get_object_or_404(Photo, id=photo_id)
     
-    # Ellenőrizze, hogy a felhasználó a tulajdonos-e
     if request.user != photo.user:
         messages.error(request, 'Csak a kép tulajdonosa törölheti a képet!')
         return redirect('photo_detail', photo_id=photo.id)
